@@ -1,0 +1,69 @@
+@startuml
+class User {
+    + int id
+    + String name
+    + String password
+    + String role
+    --
+    + authenticate(password: String): boolean
+}
+
+class Client {
+
+    + String phone
+    + String city
+    + String country
+    + String postalCode
+    --
+
+}
+
+class Admin {
+    + String adminRole
+    --
+
+    + manageProduct(): void
+    + addProduct(product: Product): void
+    + removeProduct(productId: int): void
+    + addSale(product: Product, quantity: int, client: Client): Sale
+}
+
+class Product {
+    + int id
+    + String name
+    + String description
+    + double price
+    + int stock
+    + Category category
+    --
+}
+
+class Category {
+    + int id
+    + String name
+    --
+
+}
+
+class Sale {
+    + int id
+    + Product product
+    + int quantity
+    + double totalPrice
+    + Date date
+    + Client client
+    + boolean isRefunded
+    --
+
+    + refundSale(): void
+}
+
+User <|-- Client
+User <|-- Admin
+
+Product "1..*" --> "1" Category
+Product "1" --> "0..*" Sale : sold in
+Sale "1..*" --> "1" Client
+Admin "1.." --> "0.." Product : manages
+Admin "1" --> "0..*" Sale : creates
+@enduml
